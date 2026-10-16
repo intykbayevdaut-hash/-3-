@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberHub // Student & Dev Dashboard</title>
+    <style>
+        :root {
+            --bg: #090d16;
+            --surface: #111827;
+            --border: #1f2937;
+            --accent: #10b981;
+            --accent-glow: rgba(16, 185, 129, 0.2);
+            --text: #f3f4f6;
+            --text-dim: #9ca3af;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Fira Code', monospace, sans-serif; }
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem 1rem;
+        }
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            overflow: hidden;
+        }
+        header {
+            background: linear-gradient(135deg, #111827, #1f2937);
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        h1 { font-size: 1.25rem; color: var(--accent); letter-spacing: 1px; }
+        .status { font-size: 0.85rem; color: var(--text-dim); display: flex; align-items: center; gap: 6px; }
+        .dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 8px var(--accent); }
+        .content { padding: 1.5rem; }
+        .section-title { font-size: 1rem; margin-bottom: 1rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; }
+        .terminal {
+            background: #05070b;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            height: 200px;
+            overflow-y: auto;
+            font-size: 0.9rem;
+            color: #34d399;
+            margin-bottom: 1.5rem;
+        }
+        .input-box {
+            display: flex;
+            gap: 10px;
+        }
+        input {
+            flex: 1;
+            background: #05070b;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.75rem 1rem;
+            color: var(--text);
+            font-size: 0.9rem;
+            outline: none;
+        }
+        input:focus { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-glow); }
+        button {
+            background: var(--accent);
+            color: #000;
+            border: none;
+            border-radius: 6px;
+            padding: 0.75rem 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        button:hover { opacity: 0.9; }
+        footer {
+            text-align: center;
+            padding: 1rem;
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            border-top: 1px solid var(--border);
+            background: #05070b;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>⚡ CyberHub v1.0</h1>
+            <div class="status"><span class="dot"></span> System Online</div>
+        </header>
+        <div class="content">
+            <div class="section-title">> Terminal Output & Quick Notes</div>
+            <div class="terminal" id="terminalOutput">
+                [System] Welcome to CyberHub dashboard.<br>
+                [System] Type a note or command below and press Enter or click Execute.
+            </div>
+            <div class="input-box">
+                <input type="text" id="userInput" placeholder="Enter note or command (e.g., 'help' or task name)...">
+                <button id="execBtn">Execute</button>
+            </div>
+        </div>
+        <footer>
+            Built for GitHub • Open Source & Ready to Deploy
+        </footer>
+    </div>
+    <script>
+        const terminal = document.getElementById('terminalOutput');
+        const input = document.getElementById('userInput');
+        const btn = document.getElementById('execBtn');
+
+        function addLog(text, isCommand = false) {
+            const time = new Date().toLocaleTimeString();
+            const prefix = isCommand ? '> ' : '[System] ';
+            terminal.innerHTML += `<br>${prefix}${text} <span style="color:#6b7280; font-size:0.75rem;">(${time})</span>`;
+            terminal.scrollTop = terminal.scrollHeight;
+        }
+
+        function handleAction() {
+            const val = input.value.trim();
+            if (!val) return;
+            addLog(val, true);
+            if (val === 'help') {
+                addLog('Available commands: help, clear, status, about');
+            } else if (val === 'clear') {
+                terminal.innerHTML = '[System] Terminal cleared.';
+            } else if (val === 'status') {
+                addLog('All systems operational. CPU normal. Memory optimized.');
+            } else if (val === 'about') {
+                addLog('CyberHub is a lightweight, self-contained dashboard ready for GitHub Pages.');
+            } else {
+                addLog(`Saved note/command: "${val}"`);
+            }
+            input.value = '';
+        }
+
+        btn.addEventListener('click', handleAction);
+        input.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleAction();
+        });
+    </script>
+</body>
+</html>
